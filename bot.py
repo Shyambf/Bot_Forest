@@ -66,7 +66,7 @@ class bot:
         update.callback_query.message.delete()
 
     def start(self, update: Update, context: CallbackContext):
-        update.message.reply_text('Приветствуем Вас в боте Forest\nФункционал нашего бота доступен только админам, для\nполучения статуса админа пишите в лс @Shyam134\n\n1) /new - создать новое объявление\n2) /admins - вывести список всех админов\n3) /new_admin - добавить нового админа')
+        update.message.reply_text(f'Приветствуем Вас в боте Forest\nФункционал нашего бота доступен только админам, для\nполучения статуса админа пишите в лс @Shyam134\nВаш ID: {update.message.chat_id}\n\n1) /new - создать новое объявление\n2) /admins - вывести список всех админов\n3) /new_admin - добавить нового админа')
 
     def new_admin(self, update: Update, context: CallbackContext):
         if self.sql.chek(update.message.chat_id):
@@ -89,7 +89,6 @@ class bot:
         _, user_pk, page = update.callback_query.data.split()
         user_pk = int(user_pk)
         ticher = self.sql.get_one_admin(user_pk)
-        print(*ticher)
         id = ticher[0][0]
         name = ticher[0][1]
         keym = [
@@ -100,47 +99,51 @@ class bot:
         update.callback_query.message.edit_reply_markup(reply_markup=InlineKeyboardMarkup(keym, one_time_keyboard=False, resize_keyboard=True))
 
     def list_ticher(self, update: Update, context: CallbackContext):
-        if update.callback_query:
-            uid = update.callback_query.message.chat.id
-        else:
-            uid = update.message.chat.id
-        list_bottuns = self.sql.get_admins()
-        if list_bottuns:
-            page = 0
+        if self.sql.chek(update.message.chat_id):
             if update.callback_query:
-                try:
-                    _, readpage = update.callback_query.data.split()
-                    page = int(readpage)
-                except Exception:
-                    pass
-            object_in_page = 5
-            ticher = []
-            for i in list_bottuns[object_in_page*page:object_in_page*page + object_in_page]:
-                name = i[1]
-                pk = i[0]
-                ticher.append([InlineKeyboardButton(name, callback_data=f'get_user_info {pk} {page}')])
-            prevnext = list()
-            if page > 0:
-                prevnext.append(InlineKeyboardButton(f'{page} <<', callback_data=f'list_ticher {page-1}'))
-            if len(list_bottuns) > object_in_page * (page + 1):
-                prevnext.append(InlineKeyboardButton(f'>> {page+2}', callback_data=f'list_ticher {page+1}'))
-            if prevnext:
-                ticher.append(prevnext)
-            ticher.append([InlineKeyboardButton(f'Закрыть', callback_data=f'del')])
-            if update.callback_query:
-                update.callback_query.message.edit_text('Все администраторы:')
-                # ,reply_markup=InlineKeyboardMarkup(ST.page2,one_time_keyboard=False, resize_keyboard=True))
-                update.callback_query.message.edit_reply_markup(
-                    reply_markup=InlineKeyboardMarkup(ticher, one_time_keyboard=False, resize_keyboard=True))
+                uid = update.callback_query.message.chat.id
             else:
-                update.message.reply_text("все учителя:", reply_markup=InlineKeyboardMarkup(ticher,one_time_keyboard=False, resize_keyboard=True))
-                update.message.delete()
+                uid = update.message.chat.id
+            list_bottuns = self.sql.get_admins()
+            if list_bottuns:
+                page = 0
+                if update.callback_query:
+                    try:
+                        _, readpage = update.callback_query.data.split()
+                        page = int(readpage)
+                    except Exception:
+                        pass
+                object_in_page = 5
+                ticher = []
+                for i in list_bottuns[object_in_page*page:object_in_page*page + object_in_page]:
+                    name = i[1]
+                    pk = i[0]
+                    ticher.append([InlineKeyboardButton(name, callback_data=f'get_user_info {pk} {page}')])
+                prevnext = list()
+                if page > 0:
+                    prevnext.append(InlineKeyboardButton(f'{page} <<', callback_data=f'list_ticher {page-1}'))
+                if len(list_bottuns) > object_in_page * (page + 1):
+                    prevnext.append(InlineKeyboardButton(f'>> {page+2}', callback_data=f'list_ticher {page+1}'))
+                if prevnext:
+                    ticher.append(prevnext)
+                ticher.append([InlineKeyboardButton(f'Закрыть', callback_data=f'del')])
+                if update.callback_query:
+                    update.callback_query.message.edit_text('Все администраторы:')
+                    # ,reply_markup=InlineKeyboardMarkup(ST.page2,one_time_keyboard=False, resize_keyboard=True))
+                    update.callback_query.message.edit_reply_markup(
+                        reply_markup=InlineKeyboardMarkup(ticher, one_time_keyboard=False, resize_keyboard=True))
+                else:
+                    update.message.reply_text("Все администраторы:", reply_markup=InlineKeyboardMarkup(ticher,one_time_keyboard=False, resize_keyboard=True))
+                    update.message.delete()
+
+            else:
+                if update.callback_query:
+                    update.callback_query.message.edit_text('Администраторов нет')
+                else:
+                    update.message.reply_text('Администраторов нема')  # убрать
 
         else:
-            if update.callback_query:
-                update.callback_query.message.edit_text('учителей нет')
-            else:
-                update.message.reply_text('учителей нема')  # убрать
+            update.message.reply_text(f'Вы не можете использовать данную команду\nВаш ID: {update.message.chat_id}')
 
     def new_id(self, update: Update, context: CallbackContext):
         ST.id = int(update.message.text)
