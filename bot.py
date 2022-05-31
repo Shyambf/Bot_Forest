@@ -69,7 +69,12 @@ class bot:
         update.message.reply_text(f'Приветствуем Вас в боте Forest\nФункционал нашего бота доступен только админам, для\nполучения статуса админа пишите в лс @Shyam134\nВаш ID: {update.message.chat_id}\n\n1) /new - создать новое объявление\n2) /admins - вывести список всех админов\n3) /new_admin - добавить нового админа')
 
     def new_admin(self, update: Update, context: CallbackContext):
-        if self.sql.chek(update.message.chat_id):
+        flag = False
+        try:
+            flag = self.sql.chek(update.message.chat_id)
+        except:
+            flag = self.sql.chek(update.callback_query.message.chat_id)
+        if flag:
             update.message.reply_text('Начинаем добавлять админа\nВведите его id (его можно узнать через эту же команду от его имени)', reply_markup=InlineKeyboardMarkup(ST.keyboard, one_time_keyboard=False))
             return 1
         else:
@@ -99,7 +104,12 @@ class bot:
         update.callback_query.message.edit_reply_markup(reply_markup=InlineKeyboardMarkup(keym, one_time_keyboard=False, resize_keyboard=True))
 
     def list_ticher(self, update: Update, context: CallbackContext):
-        if self.sql.chek(update.message.chat_id):
+        flag = False
+        try:
+            flag = self.sql.chek(update.message.chat_id)
+        except:
+            flag = self.sql.chek(update.callback_query.message.chat_id)
+        if flag:
             if update.callback_query:
                 uid = update.callback_query.message.chat.id
             else:
@@ -207,7 +217,7 @@ class bot:
         ST.gender = update.callback_query.data
         update.callback_query.delete_message()
         
-        update.callback_query.message.reply_text(f'Город где потеряли человека в именительном падеже?',
+        update.callback_query.message.reply_text(f'Город где потеряли человека. (В именительном падеже?)',
                                   reply_markup=InlineKeyboardMarkup(ST.keyboard, one_time_keyboard=False))
         return 7
 
