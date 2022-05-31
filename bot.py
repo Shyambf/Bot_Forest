@@ -66,7 +66,7 @@ class bot:
         update.callback_query.message.delete()
 
     def start(self, update: Update, context: CallbackContext):
-        update.message.reply_text(f'Приветствуем Вас в боте Forest\nФункционал нашего бота доступен только админам, для\nполучения статуса админа пишите в лс @Shyam134\nВаш ID: {update.message.chat_id}\n\n1) /new - создать новое объявление\n2) /admins - вывести список всех админов\n3) /new_admin - добавить нового админа')
+        update.message.reply_text(f'Приветствуем Вас в боте Forest\nФункционал нашего бота доступен только админам, для\nполучения статуса админа пишите в лс @skylin37\nВаш ID: {update.message.chat_id}\n\n1) /new - создать новое объявление\n2) /admins - вывести список всех админов\n3) /new_admin - добавить нового админа')
 
     def new_admin(self, update: Update, context: CallbackContext):
         flag = False
@@ -180,6 +180,7 @@ class bot:
         return ConversationHandler.END
     
     def orentation(self, update: Update, context: CallbackContext):
+        print(update.message)
         try:
             f = context.bot.getFile(update.message.document.file_id)
             f.download(f'./{update.message.chat_id}.png')
