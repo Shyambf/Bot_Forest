@@ -36,3 +36,4 @@ class Bd:
 
     def get_admins(self):
         return list(self.cur.execute("""SELECT * FROM admins"""))
+
