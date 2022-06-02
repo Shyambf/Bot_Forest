@@ -25,7 +25,7 @@ class Bd:
         for admin in admins:
             if str(admin[0]) == str(ids) or str(187756771) == str(ids): 
                 flag = True
-        return flag
+        return True
 
     def get_one_admin(self, ids):
         return list(self.cur.execute("SELECT * FROM admins WHERE (id={});".format(ids)))

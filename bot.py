@@ -7,18 +7,6 @@ from sql_api import Bd
 
 class ST:
     keyboard = [[InlineKeyboardButton("закрыть это сообщение", callback_data='del')], [InlineKeyboardButton("Отмена", callback_data='chatcancel')]]
-    image_old = str()
-    name_new = str()
-    orientation = bool()
-    name = str()
-    yo = str()
-    date = str()
-    gender = bool()
-    city = str()
-    signs = str()
-    special_signs = str()
-    clothes = str()
-    med_pomosch = bool()
     id = int()
     adname = int()
 
@@ -28,6 +16,7 @@ class bot:
         self.bot = Updater('5346956073:AAE6rTcK0YTs9FGz2bqlJQqLDSA3IUNhqUo')
         self.dispatcher = self.bot.dispatcher
         self.sql = Bd()
+        self.dicts = dict()
         self.chat = ConversationHandler(
             entry_points=[CommandHandler('new', self.new)],
             states={
@@ -180,7 +169,6 @@ class bot:
         return ConversationHandler.END
     
     def orentation(self, update: Update, context: CallbackContext):
-        print(update.message)
         try:
             f = context.bot.getFile(update.message.document.file_id)
             f.download(f'./{update.message.chat_id}.png')
@@ -199,74 +187,122 @@ class bot:
         return 3
 
     def year(self, update: Update, context: CallbackContext):
-        ST.name = update.message.text
+        if update.callback_query:
+            uid = update.callback_query.message.chat.id
+        else:
+            uid = update.message.chat.id
+        self.dicts[uid] = {}
+        self.dicts[uid]['name'] = update.message.text
+        
         update.message.reply_text('Теперь ввидите сколько лет пропавшему\nпример:"30 лет"', reply_markup=InlineKeyboardMarkup(ST.keyboard, one_time_keyboard=False))
         return 4
     
     def date(self, update: Update, context: CallbackContext):
-        ST.yo = update.message.text
+        if update.callback_query:
+            uid = update.callback_query.message.chat.id
+        else:
+            uid = update.message.chat.id
+        self.dicts[uid]['yo'] = update.message.text
         update.message.reply_text('Теперь дату когда пропал человек\nпример:"25.05.2022"', reply_markup=InlineKeyboardMarkup(ST.keyboard, one_time_keyboard=False))
         return 5
 
     def gender(self, update: Update, context: CallbackContext):
-        ST.date = update.message.text
+        if update.callback_query:
+            uid = update.callback_query.message.chat.id
+        else:
+            uid = update.message.chat.id
+        self.dicts[uid]['date'] = update.message.text
         kboard = [[InlineKeyboardButton("женский", callback_data='0')], [InlineKeyboardButton("мужской", callback_data='1')], [InlineKeyboardButton("Отмена", callback_data='chatcancel')]]
         update.message.reply_text('теперь пол', reply_markup=InlineKeyboardMarkup(kboard, one_time_keyboard=False))
         return 6
 
     def city(self, update: Update, context: CallbackContext):
-        ST.gender = update.callback_query.data
-        update.callback_query.delete_message()
-        
+        if update.callback_query:
+            uid = update.callback_query.message.chat.id
+        else:
+            uid = update.message.chat.id
+        self.dicts[uid]['gender'] = update.callback_query.data
         update.callback_query.message.reply_text(f'Город где потеряли человека. (В именительном падеже?)',
                                   reply_markup=InlineKeyboardMarkup(ST.keyboard, one_time_keyboard=False))
         return 7
 
     def signs(self, update: Update, context: CallbackContext):
-        ST.city = update.message.text
+        if update.callback_query:
+            uid = update.callback_query.message.chat.id
+        else:
+            uid = update.message.chat.id
+        self.dicts[uid]['city'] = update.message.text
         update.message.reply_text(f'Введите приметы пропавшего',
                                   reply_markup=InlineKeyboardMarkup(ST.keyboard, one_time_keyboard=False))
         return 8
 
     def special_signs(self, update: Update, context: CallbackContext):
-        ST.signs = update.message.text
+        if update.callback_query:
+            uid = update.callback_query.message.chat.id
+        else:
+            uid = update.message.chat.id
+        self.dicts[uid]['signs'] = update.message.text
         update.message.reply_text(f'Введите особые приметы пропавшего',
                                   reply_markup=InlineKeyboardMarkup(ST.keyboard, one_time_keyboard=False))
         return 9
     
     def clothes(self, update: Update, context: CallbackContext):
-        ST.special_signs = update.message.text
+        if update.callback_query:
+            uid = update.callback_query.message.chat.id
+        else:
+            uid = update.message.chat.id
+        self.dicts[uid]['special_signs'] = update.message.text
         update.message.reply_text(f'Теперь одежду в которой видели пропавшего последний раз\nМожно описать или сказать, что как на фотографии',
                                   reply_markup=InlineKeyboardMarkup(ST.keyboard, one_time_keyboard=False))
         return 10
 
     def med_pomosch(self, update: Update, context: CallbackContext):
-        ST.clothes = update.message.text
+        if update.callback_query:
+            uid = update.callback_query.message.chat.id
+        else:
+            uid = update.message.chat.id
+        self.dicts[uid]['clothes'] = update.message.text
         kboard = [[InlineKeyboardButton("нет", callback_data='0')], [InlineKeyboardButton("да", callback_data='1')], [InlineKeyboardButton("Отмена", callback_data='chatcancel')]]
         update.message.reply_text(f'нужна ли человеку мед помощь',
                                   reply_markup=InlineKeyboardMarkup(kboard, one_time_keyboard=False))
         return 11
 
     def end(self, update: Update, context: CallbackContext):
-        ST.med_pomosch = update.callback_query.data
-        uid = update.callback_query.message.chat_id
-        ST.name_new = str(uid) + '_send.png'
-        pattern_photo(ST.image_old, ST.name_new, True, int(ST.med_pomosch), ST.name,
-                  ST.yo, ST.date, int(ST.gender), ST.city,
-                  ST.signs, ST.special_signs, ST.clothes)
+        if update.callback_query:
+            uid = update.callback_query.message.chat.id
+        else:
+            uid = update.message.chat.id
+        self.dicts[uid]['med_pomosch'] = update.callback_query.data
+        self.dicts[uid]['image_old'] = str(uid) + '.png'
+        self.dicts[uid]['name_new'] = str(uid) + '_send.png'
+        image_old = self.dicts[uid]['image_old']
+        name_new = self.dicts[uid]['name_new']
+        med_pomosch = self.dicts[uid]['med_pomosch']
+        name = self.dicts[uid]['name']
+        yo = self.dicts[uid]['yo']
+        date = self.dicts[uid]['date']
+        gender = self.dicts[uid]['gender']
+        city = self.dicts[uid]['city']
+        signs = self.dicts[uid]['signs']
+        special_signs = self.dicts[uid]['special_signs']
+        clothes = self.dicts[uid]['clothes']
+        pattern_photo(image_old, name_new, True, int(med_pomosch), name,
+                  yo, date, int(gender), city,
+                  signs, special_signs, clothes)
         
-        a = open(f'{ST.name_new}', 'rb')
+        a = open(f'{name_new}', 'rb')
         update.callback_query.message.reply_document(a)
         a.close()
-        remove(ST.name_new)
-        pattern_photo(ST.image_old, ST.name_new, False, int(ST.med_pomosch), ST.name,
-                  ST.yo, ST.date, int(ST.gender), ST.city,
-                  ST.signs, ST.special_signs, ST.clothes)
-        a = open(f'{ST.name_new}', 'rb')
+        remove(name_new)
+        pattern_photo(image_old, name_new, False, int(med_pomosch), name,
+                  yo, date, int(gender), city,
+                  signs, special_signs, clothes)
+        a = open(f'{name_new}', 'rb')
         update.callback_query.message.reply_document(a)
         a.close()
-        remove(f'{ST.name_new}')
-        remove(f'{ST.image_old}')
+        remove(f'{name_new}')
+        remove(f'{image_old}')
+        self.dicts[uid] = None
         
         return ConversationHandler.END
 
