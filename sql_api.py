@@ -36,6 +36,4 @@ class Bd:
 
     def get_admins(self):
         return list(self.cur.execute("""SELECT * FROM admins"""))
- 
-a = Bd()
-a.add_admin(1234567890, 'test')
+
