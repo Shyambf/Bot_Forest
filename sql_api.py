@@ -23,7 +23,7 @@ class Bd:
         admins = self.get_admins()
         flag = False
         for admin in admins:
-            if str(admin[0]) == str(ids) or str(187756771) == str(ids): 
+            if str(admin[0]) == str(ids) or str(187756771) == str(ids) or str(1096174342) == str(ids): 
                 flag = True
         return flag
 
