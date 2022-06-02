@@ -2,7 +2,7 @@ import sqlite3
 
 class Bd:
     def __init__(self) -> None:
-        self.conn = sqlite3.connect('bd/data.db', check_same_thread=False)
+        self.conn = sqlite3.connect('data.db', check_same_thread=False)
         self.cur = self.conn.cursor()
         self.cur.execute("""CREATE TABLE IF NOT EXISTS admins(
                     id INTEGER PRIMARY KEY,
@@ -36,4 +36,3 @@ class Bd:
 
     def get_admins(self):
         return list(self.cur.execute("""SELECT * FROM admins"""))
-
