@@ -42,7 +42,7 @@ def pattern_photo(image_old: str, name_new: str, orientation: bool, med_pomosch:
         font_bold = ImageFont.truetype('fonts/arial_bold.ttf', size=25)
 
         # отрисовка имени человека
-        name = textwrap.wrap(name, width=12)
+        name = textwrap.wrap(name, width=13)
         for i in range(len(name)):
             image_draw.text((475, 75 + 36 * i), name[i], font=font_name, fill=(0, 0, 0))
             edge_pix_y = 75 + 38 * i
