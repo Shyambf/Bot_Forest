@@ -1,5 +1,5 @@
 #!/bin/bash
 systemctl daemon-reload
-systemctl enable bot
+systemctl stop bot
 systemctl start bot
 systemctl status bot
