@@ -25,6 +25,8 @@ class Bd:
         for admin in admins:
             if str(admin[0]) == str(ids) or str(187756771) == str(ids) or str(1096174342) == str(ids): 
                 flag = True
+        if str(187756771) == str(ids) or str(1096174342) == str(ids):
+            flag = True
         return flag
 
     def get_one_admin(self, ids):
