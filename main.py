@@ -109,7 +109,11 @@ def pattern_photo(image_old: str, name_new: str, orientation: bool, med_pomosch:
             clothes = textwrap.wrap(clothes, width=23)
             for i in range(len(clothes)):
                 if i == 0:
-                    image_draw.text((615, edge_pix_y), clothes[0][clothes[0].index(':') + 1:],
+                    if gender:
+                        image_draw.text((615, edge_pix_y), clothes[0][clothes[0].index(':') + 1:],
+                                    font=font_norm, fill=(0, 0, 0))
+                    else:
+                        image_draw.text((640, edge_pix_y), clothes[0][clothes[0].index(':') + 1:],
                                     font=font_norm, fill=(0, 0, 0))
                 else:
                     image_draw.text((475, edge_pix_y), clothes[i], font=font_norm, fill=(0, 0, 0))
@@ -197,7 +201,11 @@ def pattern_photo(image_old: str, name_new: str, orientation: bool, med_pomosch:
         clothes = textwrap.wrap(clothes, width=45)
         for i in range(len(clothes)):
             if i == 0:
-                image_draw.text((680, edge_pix_y), clothes[0][clothes[0].index(':') + 1:],
+                if gender:
+                    image_draw.text((680, edge_pix_y), clothes[0][clothes[0].index(':') + 1:],
+                                font=font_norm, fill=(0, 0, 0))
+                else:
+                    image_draw.text((710, edge_pix_y), clothes[0][clothes[0].index(':') + 1:],
                                 font=font_norm, fill=(0, 0, 0))
             else:
                 image_draw.text((510, edge_pix_y), clothes[i], font=font_norm, fill=(0, 0, 0))
