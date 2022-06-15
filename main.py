@@ -1,14 +1,15 @@
 from distutils.util import split_quoted
 
 
-def pattern_photo(image_old: str, name_new: str, orientation: bool, med_pomosch: bool, name: str,
-                  yo: str, date: str, gender: bool, city: str,
+def pattern_photo(image_old: str, name_new: str, orientation: bool, special_string: bool,
+                  text_of_ss: str, name: str, yo: str, date: str, gender: bool, city: str,
                   signs=None, special_signs=None, clothes=None):
     """
     :param image_old: имя файла фото человека
     :param name_new: имя нового итогового файла, под которым нужно сохранить
     :param orientation: ореинтация объявления (True - книжная, False - альбомная)
-    :param med_pomosch: нужна ли мед помощь (True - нужна, False - не нужна)
+    :param special_string: нужна ли специальная надпись (True - нужна, False - не нужна)
+    :param text_of_ss: текст специальной надписи
     :param name: ФИО человека
     :param yo: сколько лет
     :param date: когда пропал
