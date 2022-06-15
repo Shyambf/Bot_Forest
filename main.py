@@ -67,10 +67,21 @@ def pattern_photo(image_old: str, name_new: str, orientation: bool, med_pomosch:
         image_draw.line((475, edge_pix_y + 5, 825, edge_pix_y + 5), fill=(20, 97, 23), width=4)
         edge_pix_y += 5
 
-        # отрисовка необходимости мед. помощи
-        if med_pomosch:
-            image_draw.text((68, 625), 'НУЖДАЕТСЯ В МЕДИЦИНСКОЙ ПОМОЩИ',
-                            font=font_warn, fill=(255, 0, 0))
+        # отрисовка специальной надписи
+        if special_string:
+            text_of_ss = textwrap.wrap(text_of_ss, width=35)
+            if len(text_of_ss) == 1:
+                count = len(text_of_ss) // 2
+                image_draw.text((452 - count * 21, 590), text_of_ss, font=font_warn, width=4, fill=(255, 0, 0))
+            else:
+                for text in text_of_ss:
+                    if text == text_of_ss[-1]:
+                        count = len(text) // 2
+                        image_draw.text((452 - count * 21, 590 + text_of_ss.index(text) * 30),
+                                        text, font=font_warn, width=4, fill=(255, 0, 0))
+                    else:
+                        image_draw.text((80, 590 + text_of_ss.index(text) * 25),
+                                        text, font=font_warn, width=4, fill=(255, 0, 0))
 
         # отрисовка примет
         if signs is not None:
@@ -159,10 +170,21 @@ def pattern_photo(image_old: str, name_new: str, orientation: bool, med_pomosch:
             image_draw.text((510, edge_pix_y), date[i], font=font_date, fill=(0, 0, 0))
             edge_pix_y += 40
 
-        # отрисовка необходимости мед. помощи
-        if med_pomosch:
-            image_draw.text((510, 690), 'НУЖДАЕТСЯ В МЕДИЦИНСКОЙ ПОМОЩИ',
-                            font=font_warn, fill=(255, 0, 0))
+        # отрисовка специальной надписи
+        if special_string:
+            text_of_ss = textwrap.wrap(text_of_ss, width=35)
+            if len(text_of_ss) == 1:
+                count = len(text_of_ss[0]) // 2
+                image_draw.text((860 - count * 21, 670), text_of_ss[0], font=font_warn, width=4, fill=(255, 0, 0))
+            else:
+                for text in text_of_ss:
+                    if text == text_of_ss[-1]:
+                        count = len(text) // 2
+                        image_draw.text((860 - count * 21, 670 + text_of_ss.index(text) * 30),
+                                        text, font=font_warn, width=4, fill=(255, 0, 0))
+                    else:
+                        image_draw.text((510, 670 + text_of_ss.index(text) * 25),
+                                        text, font=font_warn, width=4, fill=(255, 0, 0))
 
         # отрисовка примет
         if signs is not None:
