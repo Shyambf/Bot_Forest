@@ -4,6 +4,7 @@ from telegram.ext import Updater, CallbackContext, CommandHandler, MessageHandle
 from main import pattern_photo
 from os import remove
 from sql_api import Bd
+from progress_msg import ProgressMsg
 
 class ST:
     keyboard = [[InlineKeyboardButton("закрыть это сообщение", callback_data='del')], [InlineKeyboardButton("Отмена", callback_data='chatcancel')]]
@@ -30,7 +31,7 @@ class bot:
                 8: [MessageHandler(Filters.all, self.special_signs)],
                 9: [MessageHandler(Filters.all, self.clothes)],
                 10: [MessageHandler(Filters.all, self.med_pomosch)],
-                11: [CallbackQueryHandler(self.end, pattern=r'^.$')],
+                11: [MessageHandler(Filters.all, self.end),],
             },
             fallbacks=[CallbackQueryHandler(self.chat_cancel, pattern=r'^chatcancel$')]
         )
@@ -221,6 +222,7 @@ class bot:
             uid = update.callback_query.message.chat.id
         else:
             uid = update.message.chat.id
+        update.callback_query.message.delete()
         self.dicts[uid]['gender'] = update.callback_query.data
         update.callback_query.message.reply_text(f'Город где потеряли человека. (В именительном падеже?)',
                                   reply_markup=InlineKeyboardMarkup(ST.keyboard, one_time_keyboard=False))
@@ -262,22 +264,32 @@ class bot:
         else:
             uid = update.message.chat.id
         self.dicts[uid]['clothes'] = update.message.text
-        kboard = [[InlineKeyboardButton("нет", callback_data='0')], [InlineKeyboardButton("да", callback_data='1')], [InlineKeyboardButton("Отмена", callback_data='chatcancel')]]
-        update.message.reply_text(f'нужна ли человеку мед помощь',
-                                  reply_markup=InlineKeyboardMarkup(kboard, one_time_keyboard=False))
+        update.message.reply_text('Ведите то, что будет написанно красными буквами\nК примеру:\n"Нуждается в мед помощи"\nИли\n"Возможна потеря памяти"\n\nЕсли такая надпись не нужна оправть в сообщении "1"')
+        
         return 11
 
     def end(self, update: Update, context: CallbackContext):
         if update.callback_query:
             uid = update.callback_query.message.chat.id
+            up = update.callback_query.message
         else:
             uid = update.message.chat.id
-        self.dicts[uid]['med_pomosch'] = update.callback_query.data
+            up = update.message
+        mess = ProgressMsg(up, 'создаем объявления')
+        if update.message.text != '1':
+               self.dicts[uid]['special_string_text'] = update.message.text
+               self.dicts[uid]['special_string'] = True
+        else:
+            self.dicts[uid]['special_string_text'] = ' '
+            self.dicts[uid]['special_string'] = False
+        special_string_text = self.dicts[uid]['special_string_text']
+        special_string = self.dicts[uid]['special_string']
         self.dicts[uid]['image_old'] = str(uid) + '.png'
-        self.dicts[uid]['name_new'] = str(uid) + '_send.png'
+        self.dicts[uid]['name_new1'] = str(uid) + '1_send.png'
+        self.dicts[uid]['name_new2'] = str(uid) + '2_send.png'
         image_old = self.dicts[uid]['image_old']
-        name_new = self.dicts[uid]['name_new']
-        med_pomosch = self.dicts[uid]['med_pomosch']
+        name_new1 = self.dicts[uid]['name_new1']
+        name_new2 = self.dicts[uid]['name_new2']
         name = self.dicts[uid]['name']
         yo = self.dicts[uid]['yo']
         date = self.dicts[uid]['date']
@@ -286,21 +298,22 @@ class bot:
         signs = self.dicts[uid]['signs']
         special_signs = self.dicts[uid]['special_signs']
         clothes = self.dicts[uid]['clothes']
-        pattern_photo(image_old, name_new, True, int(med_pomosch), name,
+        pattern_photo(image_old, name_new1, True, special_string, special_string_text, name,
                   yo, date, int(gender), city,
                   signs, special_signs, clothes)
-        
-        a = open(f'{name_new}', 'rb')
-        update.callback_query.message.reply_document(a)
-        a.close()
-        remove(name_new)
-        pattern_photo(image_old, name_new, False, int(med_pomosch), name,
+    
+        pattern_photo(image_old, name_new2, False, special_string, special_string_text, name,
                   yo, date, int(gender), city,
                   signs, special_signs, clothes)
-        a = open(f'{name_new}', 'rb')
-        update.callback_query.message.reply_document(a)
+        mess.finish()
+        a = open(f'{name_new1}', 'rb')
+        b = open(f'{name_new2}', 'rb')
+        up.reply_document(a)
+        up.reply_document(b)
         a.close()
-        remove(f'{name_new}')
+        b.close()
+        remove(f'{name_new1}')
+        remove(f'{name_new2}')
         remove(f'{image_old}')
         self.dicts[uid] = None
         

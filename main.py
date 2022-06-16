@@ -72,8 +72,8 @@ def pattern_photo(image_old: str, name_new: str, orientation: bool, special_stri
         if special_string:
             text_of_ss = textwrap.wrap(text_of_ss, width=35)
             if len(text_of_ss) == 1:
-                count = len(text_of_ss) // 2
-                image_draw.text((452 - count * 21, 590), text_of_ss, font=font_warn, width=4, fill=(255, 0, 0))
+                count = len(text_of_ss[0]) // 2
+                image_draw.text((452 - count * 21, 590), text_of_ss[0], font=font_warn, width=4, fill=(255, 0, 0))
             else:
                 for text in text_of_ss:
                     if text == text_of_ss[-1]:
@@ -221,7 +221,7 @@ def pattern_photo(image_old: str, name_new: str, orientation: bool, special_stri
         edge_pix_y += 5
         text = 'Былоодет: ' if gender else 'Былааодета: '
         clothes = text + clothes
-        clothes = textwrap.wrap(clothes, width=45)
+        clothes = textwrap.wrap(clothes, width=44)
         for i in range(len(clothes)):
             if i == 0:
                 if gender:
