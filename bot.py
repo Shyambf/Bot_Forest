@@ -275,6 +275,7 @@ class bot:
         else:
             uid = update.message.chat.id
             up = update.message
+        update.message.reply_text('для отмены создания или при ошибке нажмите на кнопку', reply_markup=ST.keyboard)
         mess = ProgressMsg(up, 'создаем объявления')
         if update.message.text != '1':
                self.dicts[uid]['special_string_text'] = update.message.text

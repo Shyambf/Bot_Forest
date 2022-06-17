@@ -1,11 +1,11 @@
 [Unit]
 Description=Telegram bot 'Bot Forest'
 After=syslog.target
-After=network.target
+After=network.target vasd.service
 
 [Service]
 Type=simple
-User=test
+User=shyam
 WorkingDirectory=/home/bot
 ExecStart=/usr/bin/python3 /home/bot/bot.py
 RestartSec=10
