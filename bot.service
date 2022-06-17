@@ -1,7 +1,7 @@
 [Unit]
 Description=Telegram bot 'Bot Forest'
 After=syslog.target
-After=network.target vasd.service
+After=network.target 
 
 [Service]
 Type=simple
