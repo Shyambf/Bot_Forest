@@ -14,7 +14,7 @@ class ST:
 
 class bot:
     def __init__(self):
-        self.bot = Updater('5346956073:AAE6rTcK0YTs9FGz2bqlJQqLDSA3IUNhqUo')
+        self.bot = Updater('1470615684:AAG1A6VVryqBgRdPnre4rCZLjl16BoVc6Jw')
         self.dispatcher = self.bot.dispatcher
         self.sql = Bd()
         self.dicts = dict()
@@ -140,7 +140,7 @@ class bot:
                 if update.callback_query:
                     update.callback_query.message.edit_text('Администраторов нет')
                 else:
-                    update.message.reply_text('Администраторов нема')  # убрать
+                    update.message.reply_text('Администраторов нет')
 
         else:
             update.message.reply_text(f'Вы не можете использовать данную команду\nВаш ID: {update.message.chat_id}')
