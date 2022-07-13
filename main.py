@@ -2,7 +2,7 @@ from distutils.util import split_quoted
 
 
 def pattern_photo(image_old: str, name_new: str, orientation: bool, special_string: bool,
-                  text_of_ss: str, name: str, yo: str, date: str, gender: bool, city: str,
+                  text_of_ss: str, name: str, yo: str, date: str, city: str,
                   signs=None, special_signs=None, clothes=None):
     """
     :param image_old: имя файла фото человека
@@ -13,7 +13,6 @@ def pattern_photo(image_old: str, name_new: str, orientation: bool, special_stri
     :param name: ФИО человека
     :param yo: сколько лет
     :param date: когда пропал
-    :param gender: пол пропавшего человека (1 - муж, 0 - жен)
     :param city: город, где пропал человек
     :param signs: приметы
     :param special_signs: особые приметы
@@ -29,53 +28,53 @@ def pattern_photo(image_old: str, name_new: str, orientation: bool, special_stri
 
     # книжная ориентация
     if orientation:
-        im2 = Image.open(image_old).resize((360, 440))
-        im.paste(im2, (75, 75))
+        im2 = Image.open(image_old).resize((800, 950))
+        im.paste(im2, (150, 155))
         image_draw = ImageDraw.Draw(im)
 
         # здесь задаются шрифты, ничего не трогать
-        font_firstname = ImageFont.truetype('arial_bold.ttf', size=43)
-        font_name = ImageFont.truetype('arial.ttf', size=40)
-        font_yo = ImageFont.truetype('arial.ttf', size=25)
-        font_date = ImageFont.truetype('arial.ttf', size=25)
-        font_warn = ImageFont.truetype('arial_bold.ttf', size=36)
-        font_norm = ImageFont.truetype('arial.ttf', size=25)
-        font_bold = ImageFont.truetype('arial_bold.ttf', size=25)
+        font_firstname = ImageFont.truetype('arial_bold.ttf', size=80)
+        font_name = ImageFont.truetype('arial_bold.ttf', size=60)
+        font_norm = ImageFont.truetype('arial.ttf', size=45)
+        font_bold = ImageFont.truetype('arial_bold.ttf', size=45)
+        font_warn = ImageFont.truetype('arial_bold.ttf', size=65)
 
-        # отрисовка имени человека
+        # отрисовка фамилии человека
         firstname = name.split()[0]
-        image_draw.text((465, 75), firstname, font=font_firstname, fill=(0, 0, 0))
-        name = textwrap.wrap(' '.join(name.split()[1:]), width=15)
-        edge_pix_y = 75
+        image_draw.text((980, 155), firstname, font=font_firstname, fill=(0, 0, 0))
+
+        # отрисвока имени человека
+        name = textwrap.wrap(' '.join(name.split()[1:]), width=20)
+        edge_pix_y = 190
         for i in range(len(name)):
             edge_pix_y += 38
-            image_draw.text((465, edge_pix_y + 38 * i), name[i], font=font_name, fill=(0, 0, 0))
+            image_draw.text((980, edge_pix_y + 10 * i), name[i], font=font_name, fill=(0, 0, 0))
 
         # отрисовка даты рождения человека
         yo_int = int(yo.split()[0])
-        image_draw.text((465, edge_pix_y + 40), f'{yo} ({now - yo_int} г.р.)',
-                        font=font_yo, fill=(0, 0, 0))
-        edge_pix_y = edge_pix_y + 65
+        image_draw.text((980, edge_pix_y + 75), f'{yo} ({now - yo_int} г.р.)',
+                        font=font_norm, fill=(0, 0, 0))
+        edge_pix_y = edge_pix_y + 120
 
         # отрисовка города пропажи
         city = textwrap.wrap(city, width=26)
         for i in range(len(city)):
-            image_draw.text((465, edge_pix_y), city[i], font=font_norm, fill=(0, 0, 0))
-            edge_pix_y += 25
+            image_draw.text((980, edge_pix_y), city[i], font=font_bold, fill=(0, 0, 0))
+            edge_pix_y += 40
+        edge_pix_y += 10
 
         # отрисовка даты пропажи человека
-        date = (f'С {date} его местонахождение неизвестно' if gender
-                else f'С {date} её местонахождение неизвестно')
+        date = f'С {date} местонахождение неизвестно'
         date = textwrap.wrap(date, width=26)
         for i in range(len(date)):
-            image_draw.text((465, edge_pix_y), date[i], font=font_date, fill=(0, 0, 0))
-            edge_pix_y += 25
-        image_draw.line((465, edge_pix_y + 5, 825, edge_pix_y + 5), fill=(20, 97, 23), width=4)
-        edge_pix_y += 5
+            image_draw.text((970, edge_pix_y), date[i], font=font_bold, fill=(0, 0, 0))
+            edge_pix_y += 40
+        image_draw.line((970, edge_pix_y + 15, 1665, edge_pix_y + 15), fill=(20, 97, 23), width=10)
+        edge_pix_y += 20
 
         # отрисовка специальной надписи
         if special_string:
-            text_of_ss = textwrap.wrap(text_of_ss, width=35)
+            text_of_ss = textwrap.wrap(text_of_ss, width=43)
             if len(text_of_ss) == 1:
                 count = len(text_of_ss[0]) // 2
                 image_draw.text((452 - count * 21, 590), text_of_ss[0], font=font_warn, width=4, fill=(255, 0, 0))
@@ -83,58 +82,54 @@ def pattern_photo(image_old: str, name_new: str, orientation: bool, special_stri
                 for text in text_of_ss:
                     if text == text_of_ss[-1]:
                         count = len(text) // 2
-                        image_draw.text((452 - count * 22, 590 + text_of_ss.index(text) * 30),
+                        image_draw.text((650 - count * 22, 1180 + text_of_ss.index(text) * 50),
                                         text, font=font_warn, width=4, fill=(255, 0, 0))
                     else:
-                        image_draw.text((80, 590 + text_of_ss.index(text) * 25),
-                                        text,   font=font_warn, width=4, fill=(255, 0, 0))
+                        image_draw.text((150, 1180 + text_of_ss.index(text) * 50),
+                                        text, font=font_warn, width=4, fill=(255, 0, 0))
 
         # отрисовка примет
         if signs is not None:
-            image_draw.text((465, edge_pix_y), 'Приметы:', font=font_bold, fill=(0, 0, 0))
-            edge_pix_y += 5
+            image_draw.text((980, edge_pix_y), 'Приметы: ', font=font_bold, fill=(0, 0, 0))
             signs = 'приметы:' + signs
-            signs = textwrap.wrap(signs, width=23)
+            edge_pix_y += 9
+            signs = textwrap.wrap(signs, width=28)
             for i in range(len(signs)):
                 if i == 0:
-                    image_draw.text((610, edge_pix_y), signs[0][signs[0].index(':') + 1:],
+                    image_draw.text((1230, edge_pix_y), signs[0][signs[0].index(':') + 1:],
                                     font=font_norm, fill=(0, 0, 0))
                 else:
-                    image_draw.text((475, edge_pix_y), signs[i], font=font_norm, fill=(0, 0, 0))
-                edge_pix_y += 27
+                    image_draw.text((980, edge_pix_y), signs[i], font=font_norm, fill=(0, 0, 0))
+                edge_pix_y += 40
 
         # отрисовка особых примет
         if special_signs is not None:
-            image_draw.text((465, edge_pix_y), 'Особые приметы:', font=font_bold, fill=(0, 0, 0))
-            edge_pix_y += 5
+            image_draw.text((980, edge_pix_y), 'Особые приметы:', font=font_bold, fill=(0, 0, 0))
+            edge_pix_y += 9
             special_signs = 'особыееприметы: ' + special_signs
-            special_signs = textwrap.wrap(special_signs, width=23)
+            special_signs = textwrap.wrap(special_signs, width=30)
             for i in range(len(special_signs)):
                 if i == 0:
-                    image_draw.text((710, edge_pix_y), special_signs[0][special_signs[0].index(':') + 1:],
+                    image_draw.text((1390, edge_pix_y), special_signs[0][special_signs[0].index(':') + 1:],
                                     font=font_norm, fill=(0, 0, 0))
                 else:
-                    image_draw.text((465, edge_pix_y), special_signs[i], font=font_norm, fill=(0, 0, 0))
-                edge_pix_y += 28
+                    image_draw.text((980, edge_pix_y), special_signs[i], font=font_norm, fill=(0, 0, 0))
+                edge_pix_y += 40
 
         # отрисовка одежды пропавшего
         if clothes is not None:
-            text = 'Был одет:' if gender else 'Была одета:'
-            image_draw.text((465, edge_pix_y), text, font=font_bold, fill=(0, 0, 0))
-            edge_pix_y += 5
+            text = 'Был(а) одет(а): '
+            image_draw.text((980, edge_pix_y), text, font=font_bold, fill=(0, 0, 0))
+            edge_pix_y += 9
             clothes = text + clothes
-            clothes = textwrap.wrap(clothes, width=23)
+            clothes = textwrap.wrap(clothes, width=30)
             for i in range(len(clothes)):
                 if i == 0:
-                    if gender:
-                        image_draw.text((605, edge_pix_y), clothes[0][clothes[0].index(':') + 1:],
-                                        font=font_norm, fill=(0, 0, 0))
-                    else:
-                        image_draw.text((630, edge_pix_y), clothes[0][clothes[0].index(':') + 1:],
-                                        font=font_norm, fill=(0, 0, 0))
+                    image_draw.text((1330, edge_pix_y), clothes[0][clothes[0].index(':') + 1:],
+                                    font=font_norm, fill=(0, 0, 0))
                 else:
-                    image_draw.text((465, edge_pix_y), clothes[i], font=font_norm, fill=(0, 0, 0))
-                edge_pix_y += 26
+                    image_draw.text((980, edge_pix_y), clothes[i], font=font_norm, fill=(0, 0, 0))
+                edge_pix_y += 40
 
     # альбомная ориентация
     else:
