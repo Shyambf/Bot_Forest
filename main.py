@@ -33,11 +33,11 @@ def pattern_photo(image_old: str, name_new: str, orientation: bool, special_stri
         image_draw = ImageDraw.Draw(im)
 
         # здесь задаются шрифты, ничего не трогать
-        font_firstname = ImageFont.truetype('arial_bold.ttf', size=80)
-        font_name = ImageFont.truetype('arial_bold.ttf', size=60)
-        font_norm = ImageFont.truetype('arial.ttf', size=45)
-        font_bold = ImageFont.truetype('arial_bold.ttf', size=45)
-        font_warn = ImageFont.truetype('arial_bold.ttf', size=65)
+        font_firstname = ImageFont.truetype('fonts/arial_bold.ttf', size=80)
+        font_name = ImageFont.truetype('fonts/arial_bold.ttf', size=60)
+        font_norm = ImageFont.truetype('fonts/arial.ttf', size=45)
+        font_bold = ImageFont.truetype('fonts/arial_bold.ttf', size=45)
+        font_warn = ImageFont.truetype('fonts/arial_bold.ttf', size=65)
 
         # отрисовка фамилии человека
         firstname = name.split()[0]
@@ -139,12 +139,12 @@ def pattern_photo(image_old: str, name_new: str, orientation: bool, special_stri
         image_draw = ImageDraw.Draw(im)
 
         # здесь задаются шрифты, ничего не трогать
-        font_firstname = ImageFont.truetype('arial_bold.ttf', size=120)
-        font_name = ImageFont.truetype('arial_bold.ttf', size=90)
-        font_yo = ImageFont.truetype('arial.ttf', size=75)
-        font_norm = ImageFont.truetype('arial.ttf', size=60)
-        font_bold = ImageFont.truetype('arial_bold.ttf', size=60)
-        font_warn = ImageFont.truetype('arial_bold.ttf', size=65)
+        font_firstname = ImageFont.truetype('fonts/arial_bold.ttf', size=120)
+        font_name = ImageFont.truetype('fonts/arial_bold.ttf', size=90)
+        font_yo = ImageFont.truetype('fonts/arial.ttf', size=75)
+        font_norm = ImageFont.truetype('fonts/arial.ttf', size=60)
+        font_bold = ImageFont.truetype('fonts/arial_bold.ttf', size=60)
+        font_warn = ImageFont.truetype('fonts/arial_bold.ttf', size=65)
 
         # отрисовка фамилии человека
         firstname = name.split()[0]

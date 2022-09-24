@@ -21,8 +21,7 @@ class bot:
         self.chat = ConversationHandler(
             entry_points=[CommandHandler('new', self.new)],
             states={
-                1: [MessageHandler(Filters.all, self.orentation)],
-                2: [CallbackQueryHandler(self.name, pattern=r'^.$')],
+                1: [MessageHandler(Filters.all, self.name)],
                 3: [MessageHandler(Filters.all, self.year)],
                 4: [MessageHandler(Filters.all, self.date)],
                 5: [MessageHandler(Filters.all, self.gender)],
@@ -168,22 +167,15 @@ class bot:
         else:
             update.message.reply_text(f'вы не можете использовать данную команду\nВаш ID: {update.message.chat_id}')
         return ConversationHandler.END
-    
-    def orentation(self, update: Update, context: CallbackContext):
+
+    def name(self, update: Update, context: CallbackContext):
         try:
             f = context.bot.getFile(update.message.document.file_id)
             f.download(f'./{update.message.chat_id}.png')
         except:
             f = context.bot.getFile(update.message.photo[-1].file_id)
             f.download(f'./{update.message.chat_id}.png')
-        kboard = [[InlineKeyboardButton("✓", callback_data='0')], [InlineKeyboardButton("Отмена", callback_data='chatcancel')]]
-        update.message.reply_text('Фаил загружен\nНажмите на галочку', reply_markup=InlineKeyboardMarkup(kboard, one_time_keyboard=False))
-        return 2
-
-    def name(self, update: Update, context: CallbackContext):
-        update.callback_query.delete_message()
-        
-        update.callback_query.message.reply_text(f'Ок\nТеперь введите ФИО пропавшего',
+        update.message.reply_text(f'Ок\nТеперь введите ФИО пропавшего',
                                   reply_markup=InlineKeyboardMarkup(ST.keyboard, one_time_keyboard=False))
         return 3
 
@@ -300,11 +292,11 @@ class bot:
         special_signs = self.dicts[uid]['special_signs']
         clothes = self.dicts[uid]['clothes']
         pattern_photo(image_old, name_new1, True, special_string, special_string_text, name,
-                  yo, date, int(gender), city,
+                  yo, date, city,
                   signs, special_signs, clothes)
     
         pattern_photo(image_old, name_new2, False, special_string, special_string_text, name,
-                  yo, date, int(gender), city,
+                  yo, date, city,
                   signs, special_signs, clothes)
         mess.finish()
         a = open(f'{name_new1}', 'rb')
