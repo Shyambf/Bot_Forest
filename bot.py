@@ -1,10 +1,12 @@
+from webbrowser import get
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
-from telegram.ext import Updater, CallbackContext, CommandHandler, MessageHandler, ConversationHandler, Filters, \
-    CallbackQueryHandler
-from main import pattern_photo
-from os import remove
-from sql_api import Bd
-from progress_msg import ProgressMsg
+from telegram.ext import Updater, CallbackContext, CommandHandler, MessageHandler, \
+    ConversationHandler, Filters, CallbackQueryHandler
+from src.main import pattern_photo
+from os import remove, path, environ
+from src.sql_api import Bd
+from src.progress_msg import ProgressMsg
+from dotenv import load_dotenv
 
 class ST:
     keyboard = [[InlineKeyboardButton("закрыть это сообщение", callback_data='del')], [InlineKeyboardButton("Отмена", callback_data='chatcancel')]]
@@ -14,7 +16,7 @@ class ST:
 
 class bot:
     def __init__(self):
-        self.bot = Updater('1470615684:AAG1A6VVryqBgRdPnre4rCZLjl16BoVc6Jw')
+        self.bot = Updater(environ.get("TOKEN"))
         self.dispatcher = self.bot.dispatcher
         self.sql = Bd()
         self.dicts = dict()
@@ -24,8 +26,7 @@ class bot:
                 1: [MessageHandler(Filters.all, self.name)],
                 3: [MessageHandler(Filters.all, self.year)],
                 4: [MessageHandler(Filters.all, self.date)],
-                5: [MessageHandler(Filters.all, self.gender)],
-                6: [CallbackQueryHandler(self.city, pattern=r'^.$')],
+                6: [CallbackQueryHandler(Filters.all, self.city)],
                 7: [MessageHandler(Filters.all, self.signs)],
                 8: [MessageHandler(Filters.all, self.special_signs)],
                 9: [MessageHandler(Filters.all, self.clothes)],
@@ -197,16 +198,6 @@ class bot:
             uid = update.message.chat.id
         self.dicts[uid]['yo'] = update.message.text
         update.message.reply_text('Теперь дату когда пропал человек\nпример:"25.05.2022"', reply_markup=InlineKeyboardMarkup(ST.keyboard, one_time_keyboard=False))
-        return 5
-
-    def gender(self, update: Update, context: CallbackContext):
-        if update.callback_query:
-            uid = update.callback_query.message.chat.id
-        else:
-            uid = update.message.chat.id
-        self.dicts[uid]['date'] = update.message.text
-        kboard = [[InlineKeyboardButton("женский", callback_data='0')], [InlineKeyboardButton("мужской", callback_data='1')], [InlineKeyboardButton("Отмена", callback_data='chatcancel')]]
-        update.message.reply_text('теперь пол', reply_markup=InlineKeyboardMarkup(kboard, one_time_keyboard=False))
         return 6
 
     def city(self, update: Update, context: CallbackContext):
@@ -214,9 +205,8 @@ class bot:
             uid = update.callback_query.message.chat.id
         else:
             uid = update.message.chat.id
-        update.callback_query.message.delete()
-        self.dicts[uid]['gender'] = update.callback_query.data
-        update.callback_query.message.reply_text(f'Город где потеряли человека. (В именительном падеже?)',
+        self.dicts[uid]['date'] = update.message.text
+        update.message.reply_text(f'Город где потеряли человека. (В именительном падеже?)',
                                   reply_markup=InlineKeyboardMarkup(ST.keyboard, one_time_keyboard=False))
         return 7
 
@@ -286,7 +276,6 @@ class bot:
         name = self.dicts[uid]['name']
         yo = self.dicts[uid]['yo']
         date = self.dicts[uid]['date']
-        gender = self.dicts[uid]['gender']
         city = self.dicts[uid]['city']
         signs = self.dicts[uid]['signs']
         special_signs = self.dicts[uid]['special_signs']
@@ -325,10 +314,8 @@ class bot:
 
 if __name__ == "__main__":
     bot = bot()
+    dotenv_path = path.join(path.dirname(__file__), '.env')
+    if path.exists(dotenv_path):
+        load_dotenv(dotenv_path)
     bot.run()
-    
-# фотку меньше
-# фамилия больше на отдельной строке
-# особые приметы не всегда
-# новый блок дополнительно
-# Отловка ошибок
+

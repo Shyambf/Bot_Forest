@@ -24,7 +24,7 @@ def pattern_photo(image_old: str, name_new: str, orientation: bool, special_stri
     from PIL import Image, ImageDraw, ImageFont
 
     now = int(datetime.datetime.now().year)
-    im = Image.open('templates/book.png') if orientation else Image.open('templates/album.png')
+    im = Image.open('templates/book.jpg') if orientation else Image.open('templates/album.jpg')
 
     # книжная ориентация
     if orientation:
