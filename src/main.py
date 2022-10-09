@@ -74,15 +74,15 @@ def pattern_photo(image_old: str, name_new: str, orientation: bool, special_stri
 
         # отрисовка специальной надписи
         if special_string:
-            text_of_ss = textwrap.wrap(text_of_ss, width=43)
+            text_of_ss = textwrap.wrap(text_of_ss, width=40)
             if len(text_of_ss) == 1:
                 count = len(text_of_ss[0]) // 2
-                image_draw.text((452 - count * 21, 590), text_of_ss[0], font=font_warn, width=4, fill=(255, 0, 0))
+                image_draw.text((800 - count * 21, 1180), text_of_ss[0], font=font_warn, width=4, fill=(255, 0, 0))
             else:
                 for text in text_of_ss:
                     if text == text_of_ss[-1]:
                         count = len(text) // 2
-                        image_draw.text((650 - count * 22, 1180 + text_of_ss.index(text) * 50),
+                        image_draw.text((800 - count * 22, 1180 + text_of_ss.index(text) * 50),
                                         text, font=font_warn, width=4, fill=(255, 0, 0))
                     else:
                         image_draw.text((150, 1180 + text_of_ss.index(text) * 50),
@@ -93,7 +93,7 @@ def pattern_photo(image_old: str, name_new: str, orientation: bool, special_stri
             image_draw.text((980, edge_pix_y), 'Приметы: ', font=font_bold, fill=(0, 0, 0))
             signs = 'приметы:' + signs
             edge_pix_y += 9
-            signs = textwrap.wrap(signs, width=28)
+            signs = textwrap.wrap(signs, width=27)
             for i in range(len(signs)):
                 if i == 0:
                     image_draw.text((1230, edge_pix_y), signs[0][signs[0].index(':') + 1:],
@@ -107,7 +107,7 @@ def pattern_photo(image_old: str, name_new: str, orientation: bool, special_stri
             image_draw.text((980, edge_pix_y), 'Особые приметы:', font=font_bold, fill=(0, 0, 0))
             edge_pix_y += 9
             special_signs = 'особыееприметы: ' + special_signs
-            special_signs = textwrap.wrap(special_signs, width=30)
+            special_signs = textwrap.wrap(special_signs, width=27)
             for i in range(len(special_signs)):
                 if i == 0:
                     image_draw.text((1390, edge_pix_y), special_signs[0][special_signs[0].index(':') + 1:],
