@@ -179,12 +179,12 @@ def pattern_photo(image_old: str, name_new: str, orientation: bool, special_stri
             text_of_ss = textwrap.wrap(text_of_ss, width=35)
             if len(text_of_ss) == 1:
                 count = len(text_of_ss[0]) // 2
-                image_draw.text((1350 - count * 21, 1300), text_of_ss[0], font=font_warn, width=4, fill=(255, 0, 0))
+                image_draw.text((1450 - count * 21, 1300), text_of_ss[0], font=font_warn, width=4, fill=(255, 0, 0))
             else:
                 for text in text_of_ss:
                     if text == text_of_ss[-1]:
                         count = len(text) // 2
-                        image_draw.text((1350 - count * 20, 1300 + text_of_ss.index(text) * 55),
+                        image_draw.text((1450 - count * 20, 1300 + text_of_ss.index(text) * 55),
                                         text, font=font_warn, width=4, fill=(255, 0, 0))
                     else:
                         image_draw.text((970, 1300 + text_of_ss.index(text) * 55),
