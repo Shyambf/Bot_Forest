@@ -52,9 +52,13 @@ class bot:
         self.dispatcher.add_handler(CallbackQueryHandler(self.delm, pattern=r'^del$'))
         self.dispatcher.add_handler(CallbackQueryHandler(self.user_info, pattern=r'^get_user_info \d* \d*$'))
         self.dispatcher.add_handler(CallbackQueryHandler(self.delete_ticher, pattern=r'^deltich \d* \d*$'))
-
+        self.dispatcher.add_handler(CommandHandler('debug37', self.debug))
+        
     def delm(self, update: Update, context: CallbackContext):
         update.callback_query.message.delete()
+
+    def debug(self, update: Update, context: CallbackContext):
+        update.message.reply_text('debug56')
 
     def start(self, update: Update, context: CallbackContext):
         update.message.reply_text(f'Приветствуем Вас в боте Forest\nФункционал нашего бота доступен только админам, для\nполучения статуса админа пишите в лс @skylin37\nВаш ID: {update.message.chat_id}\n\n1) /new - создать новое объявление\n2) /admins - вывести список всех админов\n3) /new_admin - добавить нового админа')
