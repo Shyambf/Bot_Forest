@@ -17,7 +17,7 @@ class ST:
 
 class bot:
     def __init__(self):
-        self.bot = Updater(environ.get("TOKEN"))
+        self.bot = Updater(environ.get("5346956073:AAE6rTcK0YTs9FGz2bqlJQqLDSA3IUNhqUo"))
         self.dispatcher = self.bot.dispatcher
         self.sql = Bd()
         self.dicts = dict()
